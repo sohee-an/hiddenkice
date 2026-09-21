@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-// 디자인 요구사항: 상단 내비게이션은 기능 없이 구조만
 const NAV_ITEMS = [
   { label: "스토어", href: "/", active: true },
   { label: "AI OMR WORK", href: "#", active: false },
@@ -11,7 +10,7 @@ const NAV_ITEMS = [
 
 export function Header() {
   return (
-    <header className="relative z-10 bg-white px-4 py-2.5 drop-shadow-[0px_3px_2px_rgba(0,0,0,0.12)]">
+    <header className="sticky top-0 z-50 bg-white px-4 py-2.5 drop-shadow-[0px_3px_2px_rgba(0,0,0,0.12)]">
       <div className="mx-auto flex h-20 w-full max-w-content items-center justify-between">
         <div className="flex items-center gap-[100px]">
           <Link href="/" aria-label="히든카이스 홈">
@@ -42,7 +41,11 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-6">
-          <IconButton icon="/icons/shopping-cart.svg" label="장바구니" badge={1} />
+          <IconButton
+            icon="/icons/shopping-cart.svg"
+            label="장바구니"
+            badge={1}
+          />
           <IconButton icon="/icons/bell.svg" label="알림" badge={1} />
           <IconButton icon="/icons/user.svg" label="마이페이지" />
         </div>
