@@ -2,7 +2,6 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 let client: SupabaseClient | null = null;
 
-// 브라우저(CSR)에서 사용하는 Supabase 클라이언트. 앱 전체에서 하나만 생성한다.
 export function getSupabaseClient(): SupabaseClient {
   if (client) return client;
 

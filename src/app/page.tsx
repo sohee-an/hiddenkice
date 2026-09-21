@@ -1,27 +1,18 @@
 import { Suspense } from "react";
 import { PromoBannerSlider } from "@/features/banner/components/PromoBannerSlider";
-import { ProductSection } from "@/features/product/components/ProductSection";
-import { ProductGridSkeleton } from "@/features/product/components/ProductGrid";
+import {
+  ProductSection,
+  ProductSectionSkeleton,
+} from "@/features/product/components/ProductSection";
 
 export default function StorePage() {
   return (
     <>
+      <h1 className="sr-only">히든카이스 교재 스토어</h1>
       <PromoBannerSlider />
-      {/* ProductSection은 useSearchParams를 쓰므로 Suspense 경계 안에 둔다 */}
-      <Suspense fallback={<ProductSectionFallback />}>
+      <Suspense fallback={<ProductSectionSkeleton />}>
         <ProductSection />
       </Suspense>
     </>
-  );
-}
-
-function ProductSectionFallback() {
-  return (
-    <section className="mx-auto w-full max-w-content px-4 pt-[50px] pb-[50px] xl:px-0">
-      <div className="h-[42px]" />
-      <div className="mt-9">
-        <ProductGridSkeleton />
-      </div>
-    </section>
   );
 }

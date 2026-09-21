@@ -1,20 +1,15 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import { useDebounce } from "@/shared/hooks/useDebounce";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useCallback, useState } from "react";
+import { useDebouncedCallback } from "@/shared/hooks/useDebouncedCallback";
 import {
   isProductTypeFilter,
   type ProductFilter,
   type ProductTypeFilter,
 } from "../model/types";
 
-/**
- * 검색어·타입 필터를 URL 쿼리(?q=&type=)와 동기화한다.
- * 새로고침하거나 링크를 공유해도 같은 목록이 보인다.
- */
 export function useProductFilter() {
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -22,13 +17,23 @@ export function useProductFilter() {
   const rawType = searchParams.get("type");
   const type: ProductTypeFilter = isProductTypeFilter(rawType) ? rawType : "all";
 
-  // 입력창은 즉시 반영하고, URL(=조회 조건)은 디바운스 후 갱신
   const [keywordInput, setKeywordInput] = useState(urlKeyword);
-  const debouncedKeyword = useDebounce(keywordInput, 300);
+
+  const [prevUrlKeyword, setPrevUrlKeyword] = useState(urlKeyword);
+  const [pendingKeyword, setPendingKeyword] = useState<string | null>(null);
+
+  if (urlKeyword !== prevUrlKeyword) {
+    setPrevUrlKeyword(urlKeyword);
+    if (urlKeyword === pendingKeyword) {
+      setPendingKeyword(null);
+    } else {
+      setKeywordInput(urlKeyword);
+    }
+  }
 
   const updateParams = useCallback(
     (next: Partial<ProductFilter>) => {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(window.location.search);
       if (next.keyword !== undefined) {
         const keyword = next.keyword.trim();
         if (keyword) params.set("q", keyword);
@@ -39,18 +44,26 @@ export function useProductFilter() {
         else params.set("type", next.type);
       }
       const query = params.toString();
-      router.replace(query ? `${pathname}?${query}` : pathname, {
-        scroll: false,
-      });
+      window.history.replaceState(null, "", query ? `${pathname}?${query}` : pathname);
     },
-    [pathname, router, searchParams],
+    [pathname],
   );
 
-  useEffect(() => {
-    if (debouncedKeyword.trim() !== urlKeyword) {
-      updateParams({ keyword: debouncedKeyword });
-    }
-  }, [debouncedKeyword, urlKeyword, updateParams]);
+  const syncKeywordToUrl = useDebouncedCallback((keyword: string) => {
+    const trimmed = keyword.trim();
+    const current = new URLSearchParams(window.location.search).get("q") ?? "";
+    if (trimmed === current) return;
+    setPendingKeyword(trimmed);
+    updateParams({ keyword: trimmed });
+  }, 300);
+
+  const changeKeyword = useCallback(
+    (keyword: string) => {
+      setKeywordInput(keyword);
+      syncKeywordToUrl(keyword);
+    },
+    [syncKeywordToUrl],
+  );
 
   const setType = useCallback(
     (nextType: ProductTypeFilter) => updateParams({ type: nextType }),
@@ -59,5 +72,5 @@ export function useProductFilter() {
 
   const filter: ProductFilter = { keyword: urlKeyword, type };
 
-  return { filter, keywordInput, setKeywordInput, setType };
+  return { filter, keywordInput, changeKeyword, setType };
 }

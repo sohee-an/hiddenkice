@@ -22,7 +22,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="ko"
       className={`${pretendard.variable} antialiased`}
-      // 번역 등 브라우저 확장이 html 속성을 바꿔도 hydration 경고가 나지 않도록
       suppressHydrationWarning
     >
       <body className="flex min-h-screen flex-col font-sans">

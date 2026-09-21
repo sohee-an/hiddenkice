@@ -1,19 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-
-// 디자인 요구사항: 상단 내비게이션은 기능 없이 구조만
-const NAV_ITEMS = [
-  { label: "스토어", href: "/", active: true },
-  { label: "AI OMR WORK", href: "#", active: false },
-  { label: "챌린지", href: "#", active: false },
-  { label: "히든카이스 소개", href: "#", active: false },
-];
+import { MobileNavMenu } from "./MobileNavMenu";
+import { NAV_ITEMS } from "./navItems";
 
 export function Header() {
   return (
-    <header className="relative z-10 bg-white px-4 py-2.5 drop-shadow-[0px_3px_2px_rgba(0,0,0,0.12)]">
-      <div className="mx-auto flex h-20 w-full max-w-content items-center justify-between">
-        <div className="flex items-center gap-[100px]">
+    <header className="sticky top-0 z-50 bg-white px-4 py-2.5 drop-shadow-[0px_3px_2px_rgba(0,0,0,0.12)]">
+      <div className="mx-auto flex h-14 w-full max-w-content items-center justify-between lg:h-20">
+        <div className="flex items-center gap-6 lg:gap-[100px]">
           <Link href="/" aria-label="히든카이스 홈">
             <Image
               src="/icons/logo.svg"
@@ -22,14 +16,14 @@ export function Header() {
               height={17.472}
             />
           </Link>
-          <nav aria-label="주 메뉴">
+          <nav aria-label="주 메뉴" className="hidden lg:block">
             <ul className="flex items-center gap-8">
               {NAV_ITEMS.map((item) => (
                 <li key={item.label}>
                   <Link
                     href={item.href}
                     aria-current={item.active ? "page" : undefined}
-                    className={`text-body-lg font-semibold whitespace-nowrap ${
+                    className={`text-body-lg whitespace-nowrap ${
                       item.active ? "text-primary" : "text-gray-300"
                     }`}
                   >
@@ -42,9 +36,14 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-6">
-          <IconButton icon="/icons/shopping-cart.svg" label="장바구니" badge={1} />
+          <IconButton
+            icon="/icons/shopping-cart.svg"
+            label="장바구니"
+            badge={1}
+          />
           <IconButton icon="/icons/bell.svg" label="알림" badge={1} />
           <IconButton icon="/icons/user.svg" label="마이페이지" />
+          <MobileNavMenu />
         </div>
       </div>
     </header>

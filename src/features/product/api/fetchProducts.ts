@@ -21,7 +21,6 @@ function toProduct(row: ProductRow): Product {
   };
 }
 
-// LIKE 패턴의 와일드카드 문자를 일반 문자로 취급하도록 이스케이프
 function escapeLikePattern(value: string): string {
   return value.replace(/[\\%_]/g, (char) => `\\${char}`);
 }
@@ -43,7 +42,10 @@ export async function fetchProducts({
     query = query.eq("type", type);
   }
 
-  const { data, error } = await query.returns<ProductRow[]>();
+  const { data, error } = await query.overrideTypes<
+    ProductRow[],
+    { merge: false }
+  >();
   if (error) throw new Error(error.message);
 
   return data.map(toProduct);

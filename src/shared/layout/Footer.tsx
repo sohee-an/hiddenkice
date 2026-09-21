@@ -2,7 +2,7 @@ const POLICY_LINKS = ["회사소개", "이용약관", "개인정보처리방침"
 
 export function Footer() {
   return (
-    <footer className="bg-white px-4 py-10 text-body-sm font-medium text-gray-200 md:px-[60px]">
+    <footer className="bg-white px-4 py-10 text-body-sm text-gray-200 md:px-[60px]">
       <div className="flex flex-col gap-2">
         <ul className="flex items-center gap-3">
           {POLICY_LINKS.map((label, index) => (

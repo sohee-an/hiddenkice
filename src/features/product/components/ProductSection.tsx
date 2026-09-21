@@ -5,22 +5,25 @@ import { useProducts } from "../hooks/useProducts";
 import { ProductGrid, ProductGridSkeleton } from "./ProductGrid";
 import { ProductToolbar } from "./ProductToolbar";
 
+const SECTION_CLASS =
+  "mx-auto w-full max-w-content px-4 pt-[50px] pb-[50px] xl:px-0";
+
 export function ProductSection() {
-  const { filter, keywordInput, setKeywordInput, setType } = useProductFilter();
+  const { filter, keywordInput, changeKeyword, setType } = useProductFilter();
   const { data, isPending, isError, isPlaceholderData, refetch } =
     useProducts(filter);
 
   return (
     <section
       aria-labelledby="product-section-title"
-      className="mx-auto w-full max-w-content px-4 pt-[50px] pb-[50px] xl:px-0"
+      className={SECTION_CLASS}
     >
       <h2 id="product-section-title" className="sr-only">
         교재 목록
       </h2>
       <ProductToolbar
         keyword={keywordInput}
-        onKeywordChange={setKeywordInput}
+        onKeywordChange={changeKeyword}
         type={filter.type}
         onTypeChange={setType}
       />
@@ -52,6 +55,17 @@ export function ProductSection() {
   );
 }
 
+export function ProductSectionSkeleton() {
+  return (
+    <section aria-hidden className={SECTION_CLASS}>
+      <div className="h-[42px]" />
+      <div className="mt-9">
+        <ProductGridSkeleton />
+      </div>
+    </section>
+  );
+}
+
 function StatusMessage({
   message,
   action,
@@ -62,7 +76,7 @@ function StatusMessage({
   return (
     <div
       role="status"
-      className="flex flex-col items-center gap-4 py-24 text-body font-semibold text-gray-300"
+      className="flex flex-col items-center gap-4 py-24 text-body text-gray-300"
     >
       <p>{message}</p>
       {action && (

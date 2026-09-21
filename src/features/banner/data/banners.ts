@@ -8,8 +8,6 @@ export type Banner = {
 const HERO_ALT =
   "히든카이스 - 모두가 푸는 건 이유가 있습니다. 상위권이 선택한 문제집, 결과로 증명된 실전 대비서";
 
-// 디자인에는 1/5 슬라이드 중 첫 장만 제공되어 동일 이미지로 채움.
-// 배너가 늘어나면 이 목록만 교체하거나 DB 조회로 바꾸면 된다.
 export const BANNERS: Banner[] = Array.from({ length: 5 }, (_, index) => ({
   id: `hero-${index + 1}`,
   imageUrl: "/images/banner-1.png",
