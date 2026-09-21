@@ -6,7 +6,7 @@ import { ProductGrid, ProductGridSkeleton } from "./ProductGrid";
 import { ProductToolbar } from "./ProductToolbar";
 
 export function ProductSection() {
-  const { filter, keywordInput, setKeywordInput, setType } = useProductFilter();
+  const { filter, keywordInput, changeKeyword, setType } = useProductFilter();
   const { data, isPending, isError, isPlaceholderData, refetch } =
     useProducts(filter);
 
@@ -20,7 +20,7 @@ export function ProductSection() {
       </h2>
       <ProductToolbar
         keyword={keywordInput}
-        onKeywordChange={setKeywordInput}
+        onKeywordChange={changeKeyword}
         type={filter.type}
         onTypeChange={setType}
       />

@@ -59,7 +59,7 @@ src/
 └─ shared/              # 도메인과 무관한 공용 코드
    ├─ layout/           # Header, Footer
    ├─ ui/               # SearchInput, SegmentedTabs, Skeleton
-   ├─ hooks/            # useDebounce
+   ├─ hooks/            # useDebouncedCallback
    └─ lib/supabase/     # 브라우저용 Supabase 클라이언트
 ```
 
@@ -84,7 +84,7 @@ src/
 
 ```
 ProductSection (client)
- ├─ useProductFilter  ─ URL ?q=&type= 와 동기화 (새로고침·공유 시 상태 유지), 검색어 300ms 디바운스
+ ├─ useProductFilter  ─ URL ?q=&type= 와 동기화 (새로고침·공유 시 상태 유지), 검색어 300ms 디바운스 후 URL 갱신, URL 변경 시 입력창도 동기화
  └─ useProducts       ─ TanStack Query (queryKey: ['products','list',filter])
      └─ fetchProducts ─ supabase.from('products').ilike(title).eq(type)
 ```
