@@ -1,4 +1,3 @@
--- 교재 더미 데이터 36개. 첫 12개는 Figma 그리드와 동일한 순서이며, created_at을 1분 간격으로 지정해 정렬 순서를 고정한다
 truncate table public.products;
 
 insert into public.products (title, type, price, sale_price, image_url, created_at) values
