@@ -11,8 +11,8 @@ const NAV_ITEMS = [
 export function Header() {
   return (
     <header className="sticky top-0 z-50 bg-white px-4 py-2.5 drop-shadow-[0px_3px_2px_rgba(0,0,0,0.12)]">
-      <div className="mx-auto flex h-20 w-full max-w-content items-center justify-between">
-        <div className="flex items-center gap-[100px]">
+      <div className="mx-auto flex h-14 w-full max-w-content items-center justify-between lg:h-20">
+        <div className="flex items-center gap-6 lg:gap-[100px]">
           <Link href="/" aria-label="히든카이스 홈">
             <Image
               src="/icons/logo.svg"
@@ -21,7 +21,8 @@ export function Header() {
               height={17.472}
             />
           </Link>
-          <nav aria-label="주 메뉴">
+          {/* 모바일 디자인이 없어 좁은 화면에서는 메뉴를 숨긴다 */}
+          <nav aria-label="주 메뉴" className="hidden lg:block">
             <ul className="flex items-center gap-8">
               {NAV_ITEMS.map((item) => (
                 <li key={item.label}>
