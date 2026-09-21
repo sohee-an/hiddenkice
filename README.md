@@ -2,6 +2,9 @@
 
 히든카이스 교재 스토어 메인 화면. Supabase에 저장된 교재 목록을 클라이언트(CSR)에서 조회하고, 검색·유형 필터를 제공한다.
 
+- 배포: https://hiddenkice.vercel.app/
+- 저장소: https://github.com/sohee-an/hiddenkice
+
 ## 기술 스택
 
 - Next.js 16 (App Router), React 19, TypeScript
@@ -42,22 +45,24 @@ hiddenkice/
 ```
 src/
 ├─ app/                 # 라우팅과 페이지 조립만 담당
+│  ├─ _components/      # Header, Footer, MobileNavMenu (루트 레이아웃 전용, 라우팅 제외)
 │  ├─ layout.tsx        # 폰트, Providers, Header/Footer
 │  ├─ providers.tsx     # QueryClientProvider
 │  ├─ page.tsx          # 스토어 메인 (Banner + ProductSection)
 │  └─ globals.css       # 디자인 토큰
 ├─ features/            # 도메인 단위 모듈
 │  ├─ product/
+│  │  ├─ index.ts       # 공개 진입점 (app은 여기서만 import)
 │  │  ├─ api/           # Supabase 조회 (DB row → 도메인 모델 변환)
 │  │  ├─ hooks/         # useProducts(무한 스크롤 Query), useProductFilter(URL 동기화)
 │  │  ├─ components/    # ProductSection, Toolbar, Grid, Card, Price
 │  │  ├─ model/         # 타입, 라벨, 필터 옵션
 │  │  └─ lib/           # 가격 포맷, 할인율 계산
 │  └─ banner/
+│     ├─ index.ts       # 공개 진입점
 │     ├─ components/    # PromoBannerSlider
 │     └─ data/          # 배너 목록
 └─ shared/              # 도메인과 무관한 공용 코드
-   ├─ layout/           # Header, Footer
    ├─ ui/               # SearchInput, SegmentedTabs, Skeleton
    ├─ hooks/            # useDebouncedCallback, useIntersect(IntersectionObserver)
    └─ lib/supabase/     # 브라우저용 Supabase 클라이언트
@@ -65,9 +70,9 @@ src/
 
 | 폴더 | 역할 | 넣는 기준 |
 |---|---|---|
-| `app/` | 라우팅, 레이아웃, 페이지 조립 | Next.js 파일 규칙(`page`, `layout` 등)과 전역 설정만 둔다. 로직은 두지 않는다 |
+| `app/` | 라우팅, 레이아웃, 페이지 조립 | Next.js 파일 규칙(`page`, `layout` 등)과 전역 설정만 둔다. 앱 전용 레이아웃(Header, Footer)은 private folder `_components`에 둔다 |
 | `features/<도메인>/` | 도메인별 UI·데이터 조회·타입·유틸 | 특정 도메인(교재, 배너)에만 쓰이는 코드 |
-| `shared/` | 공용 레이아웃, UI 컴포넌트, 훅, 외부 서비스 클라이언트 | 어느 도메인에도 속하지 않고 여러 곳에서 재사용되는 코드 |
+| `shared/` | UI 컴포넌트, 훅, 외부 서비스 클라이언트 | 어느 도메인에도 속하지 않고 여러 곳에서 재사용되는 코드 |
 
 각 feature 안은 역할별로 나눈다.
 
@@ -77,7 +82,12 @@ src/
 - `model/` — 타입과 상수(라벨, 필터 옵션)
 - `lib/` — 순수 함수(가격 포맷, 할인율 계산)
 
-**의존 방향: `app → features → shared`** (역방향·feature 간 import 금지).
+**의존 방향: `app → features → shared`** (역방향·feature 간 import 금지). 이 규칙은 `eslint.config.mjs`의 `no-restricted-imports`로 강제한다.
+
+- `app`은 feature 내부 파일이 아닌 공개 진입점(`@/features/<도메인>`)으로만 import한다.
+- feature는 다른 feature와 `app`을 import할 수 없다.
+- `shared`는 `app`, `features`를 import할 수 없다.
+
 새 도메인(장바구니, 챌린지 등)은 `features/<도메인>`을 추가하는 것으로 확장하며 기존 코드는 수정하지 않는다.
 
 ## 데이터 흐름
