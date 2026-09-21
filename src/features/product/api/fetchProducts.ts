@@ -43,7 +43,10 @@ export async function fetchProducts({
     query = query.eq("type", type);
   }
 
-  const { data, error } = await query.returns<ProductRow[]>();
+  const { data, error } = await query.overrideTypes<
+    ProductRow[],
+    { merge: false }
+  >();
   if (error) throw new Error(error.message);
 
   return data.map(toProduct);
