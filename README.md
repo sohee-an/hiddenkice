@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 히든카이스 스토어
 
-## Getting Started
+히든카이스 교재 스토어 메인 화면. Supabase에 저장된 교재 목록을 클라이언트(CSR)에서 조회하고, 검색·유형 필터를 제공한다.
 
-First, run the development server:
+## 기술 스택
+
+- Next.js 16 (App Router), React 19, TypeScript
+- Tailwind CSS v4 (Figma 디자인 토큰을 `@theme`으로 정의)
+- Supabase (PostgreSQL + RLS)
+- TanStack Query (CSR 데이터 조회·캐싱)
+
+## 실행
 
 ```bash
+npm install
+cp .env.example .env.local   # Supabase URL, publishable key 입력
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Supabase 준비
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Supabase 대시보드 SQL Editor에서 순서대로 실행한다.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. `supabase/migrations/0001_create_products.sql` — 테이블 + RLS(조회만 허용)
+2. `supabase/seed.sql` — 교재 더미 데이터
 
-## Learn More
+## 폴더 구조
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├─ app/                 # 라우팅과 페이지 조립만 담당
+│  ├─ layout.tsx        # 폰트, Providers, Header/Footer
+│  ├─ providers.tsx     # QueryClientProvider
+│  ├─ page.tsx          # 스토어 메인 (Banner + ProductSection)
+│  └─ globals.css       # 디자인 토큰
+├─ features/            # 도메인 단위 모듈
+│  ├─ product/
+│  │  ├─ api/           # Supabase 조회 (DB row → 도메인 모델 변환)
+│  │  ├─ hooks/         # useProducts(Query), useProductFilter(URL 동기화)
+│  │  ├─ components/    # ProductSection, Toolbar, Grid, Card, Price
+│  │  ├─ model/         # 타입, 라벨, 필터 옵션
+│  │  └─ lib/           # 가격 포맷, 할인율 계산
+│  └─ banner/
+│     ├─ components/    # PromoBannerSlider
+│     └─ data/          # 배너 목록
+└─ shared/              # 도메인과 무관한 공용 코드
+   ├─ layout/           # Header, Footer
+   ├─ ui/               # SearchInput, SegmentedTabs, Skeleton
+   ├─ hooks/            # useDebounce
+   └─ lib/supabase/     # 브라우저용 Supabase 클라이언트
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**의존 방향: `app → features → shared`** (역방향·feature 간 import 금지).
+새 도메인(장바구니, 챌린지 등)은 `features/<도메인>`을 추가하는 것으로 확장하며 기존 코드는 수정하지 않는다.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 데이터 흐름
 
-## Deploy on Vercel
+```
+ProductSection (client)
+ ├─ useProductFilter  ─ URL ?q=&type= 와 동기화 (새로고침·공유 시 상태 유지), 검색어 300ms 디바운스
+ └─ useProducts       ─ TanStack Query (queryKey: ['products','list',filter])
+     └─ fetchProducts ─ supabase.from('products').ilike(title).eq(type)
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- 검색·필터는 DB 쿼리로 처리해 데이터가 늘어나도 동일하게 동작하고, 페이지네이션 확장이 쉽다.
+- 할인율은 저장하지 않고 `price`, `sale_price`로 계산해 데이터 불일치를 방지한다.
