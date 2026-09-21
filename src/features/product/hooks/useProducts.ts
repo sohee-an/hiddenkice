@@ -14,7 +14,6 @@ export function useProducts(filter: ProductFilter) {
   return useQuery({
     queryKey: productKeys.list(filter),
     queryFn: () => fetchProducts(filter),
-    // 검색어/탭이 바뀌는 동안 이전 목록을 유지해 화면 깜빡임 방지
     placeholderData: keepPreviousData,
   });
 }

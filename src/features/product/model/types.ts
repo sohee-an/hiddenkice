@@ -4,14 +4,11 @@ export type Product = {
   id: string;
   title: string;
   type: ProductType;
-  /** 정가 */
   price: number;
-  /** 할인가. null이면 할인 없음 */
   salePrice: number | null;
   imageUrl: string;
 };
 
-/** 목록 필터. "all"은 타입 조건 없음 */
 export type ProductTypeFilter = ProductType | "all";
 
 export type ProductFilter = {

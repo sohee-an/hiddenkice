@@ -55,7 +55,6 @@ export function ProductSection() {
   );
 }
 
-/** ProductSection이 준비되기 전(Suspense fallback)에 보여줄 자리 표시 */
 export function ProductSectionSkeleton() {
   return (
     <section aria-hidden className={SECTION_CLASS}>

@@ -11,7 +11,6 @@ type SegmentedTabsProps<T extends string> = {
   label: string;
 };
 
-// "전체 | 패스 | 단품" 형태의 텍스트 탭
 export function SegmentedTabs<T extends string>({
   options,
   value,

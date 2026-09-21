@@ -16,7 +16,6 @@ export function Header() {
               height={17.472}
             />
           </Link>
-          {/* 좁은 화면에서는 MobileNavMenu로 접어서 제공 */}
           <nav aria-label="주 메뉴" className="hidden lg:block">
             <ul className="flex items-center gap-8">
               {NAV_ITEMS.map((item) => (

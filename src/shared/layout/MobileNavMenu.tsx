@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useEffect, useId, useState } from "react";
 import { NAV_ITEMS } from "./navItems";
 
-// 모바일 시안이 없어 PC 메뉴를 그대로 접어 두고, 버튼으로 펼치는 최소 형태로 제공한다
 export function MobileNavMenu() {
   const [open, setOpen] = useState(false);
   const menuId = useId();
