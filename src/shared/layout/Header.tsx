@@ -1,12 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-
-const NAV_ITEMS = [
-  { label: "스토어", href: "/", active: true },
-  { label: "AI OMR WORK", href: "#", active: false },
-  { label: "챌린지", href: "#", active: false },
-  { label: "히든카이스 소개", href: "#", active: false },
-];
+import { MobileNavMenu } from "./MobileNavMenu";
+import { NAV_ITEMS } from "./navItems";
 
 export function Header() {
   return (
@@ -21,7 +16,7 @@ export function Header() {
               height={17.472}
             />
           </Link>
-          {/* 모바일 디자인이 없어 좁은 화면에서는 메뉴를 숨긴다 */}
+          {/* 좁은 화면에서는 MobileNavMenu로 접어서 제공 */}
           <nav aria-label="주 메뉴" className="hidden lg:block">
             <ul className="flex items-center gap-8">
               {NAV_ITEMS.map((item) => (
@@ -49,6 +44,7 @@ export function Header() {
           />
           <IconButton icon="/icons/bell.svg" label="알림" badge={1} />
           <IconButton icon="/icons/user.svg" label="마이페이지" />
+          <MobileNavMenu />
         </div>
       </div>
     </header>
