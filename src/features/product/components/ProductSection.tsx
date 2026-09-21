@@ -19,12 +19,17 @@ export function ProductSection() {
     refetch,
     hasNextPage,
     isFetchingNextPage,
+    isFetchNextPageError,
     fetchNextPage,
   } = useProducts(filter);
 
   const products = data?.pages.flatMap((page) => page.items) ?? [];
   const loadMoreRef = useIntersect<HTMLDivElement>(() => fetchNextPage(), {
-    enabled: hasNextPage && !isFetchingNextPage && !isPlaceholderData,
+    enabled:
+      hasNextPage &&
+      !isFetchingNextPage &&
+      !isFetchNextPageError &&
+      !isPlaceholderData,
   });
 
   return (
@@ -48,7 +53,7 @@ export function ProductSection() {
       >
         {isPending ? (
           <ProductGridSkeleton />
-        ) : isError ? (
+        ) : isError && !data ? (
           <StatusMessage
             message="교재 목록을 불러오지 못했습니다."
             action={{ label: "다시 시도", onClick: () => refetch() }}
@@ -69,7 +74,14 @@ export function ProductSection() {
                 <ProductGridSkeleton count={4} />
               </div>
             )}
-            <div ref={loadMoreRef} aria-hidden className="h-px" />
+            {isFetchNextPageError ? (
+              <StatusMessage
+                message="교재를 더 불러오지 못했습니다."
+                action={{ label: "다시 시도", onClick: () => fetchNextPage() }}
+              />
+            ) : (
+              <div ref={loadMoreRef} aria-hidden className="h-px" />
+            )}
           </>
         )}
       </div>

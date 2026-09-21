@@ -1,9 +1,6 @@
 import { Suspense } from "react";
-import { PromoBannerSlider } from "@/features/banner/components/PromoBannerSlider";
-import {
-  ProductSection,
-  ProductSectionSkeleton,
-} from "@/features/product/components/ProductSection";
+import { PromoBannerSlider } from "@/features/banner";
+import { ProductSection, ProductSectionSkeleton } from "@/features/product";
 
 export default function StorePage() {
   return (
