@@ -5,6 +5,9 @@ import { useProducts } from "../hooks/useProducts";
 import { ProductGrid, ProductGridSkeleton } from "./ProductGrid";
 import { ProductToolbar } from "./ProductToolbar";
 
+const SECTION_CLASS =
+  "mx-auto w-full max-w-content px-4 pt-[50px] pb-[50px] xl:px-0";
+
 export function ProductSection() {
   const { filter, keywordInput, changeKeyword, setType } = useProductFilter();
   const { data, isPending, isError, isPlaceholderData, refetch } =
@@ -13,7 +16,7 @@ export function ProductSection() {
   return (
     <section
       aria-labelledby="product-section-title"
-      className="mx-auto w-full max-w-content px-4 pt-[50px] pb-[50px] xl:px-0"
+      className={SECTION_CLASS}
     >
       <h2 id="product-section-title" className="sr-only">
         교재 목록
@@ -47,6 +50,18 @@ export function ProductSection() {
         ) : (
           <ProductGrid products={data} />
         )}
+      </div>
+    </section>
+  );
+}
+
+/** ProductSection이 준비되기 전(Suspense fallback)에 보여줄 자리 표시 */
+export function ProductSectionSkeleton() {
+  return (
+    <section aria-hidden className={SECTION_CLASS}>
+      <div className="h-[42px]" />
+      <div className="mt-9">
+        <ProductGridSkeleton />
       </div>
     </section>
   );
