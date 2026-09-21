@@ -22,7 +22,7 @@ npm run dev
 Supabase 대시보드 SQL Editor에서 순서대로 실행한다.
 
 1. `supabase/migrations/0001_create_products.sql` — 테이블 + RLS(조회만 허용)
-2. `supabase/seed.sql` — 교재 더미 데이터
+2. `supabase/seed.sql` — 교재 더미 데이터 36개
 
 ## 폴더 구조
 
@@ -35,7 +35,7 @@ hiddenkice/
 │  └─ images/           # 배너, 교재 표지 이미지
 ├─ supabase/
 │  ├─ migrations/       # 테이블 + RLS 정책 SQL
-│  └─ seed.sql          # 교재 더미 데이터
+│  └─ seed.sql          # 교재 더미 데이터 36개
 └─ src/  (아래)
 ```
 
@@ -49,7 +49,7 @@ src/
 ├─ features/            # 도메인 단위 모듈
 │  ├─ product/
 │  │  ├─ api/           # Supabase 조회 (DB row → 도메인 모델 변환)
-│  │  ├─ hooks/         # useProducts(Query), useProductFilter(URL 동기화)
+│  │  ├─ hooks/         # useProducts(무한 스크롤 Query), useProductFilter(URL 동기화)
 │  │  ├─ components/    # ProductSection, Toolbar, Grid, Card, Price
 │  │  ├─ model/         # 타입, 라벨, 필터 옵션
 │  │  └─ lib/           # 가격 포맷, 할인율 계산
@@ -59,7 +59,7 @@ src/
 └─ shared/              # 도메인과 무관한 공용 코드
    ├─ layout/           # Header, Footer
    ├─ ui/               # SearchInput, SegmentedTabs, Skeleton
-   ├─ hooks/            # useDebouncedCallback
+   ├─ hooks/            # useDebouncedCallback, useIntersect(IntersectionObserver)
    └─ lib/supabase/     # 브라우저용 Supabase 클라이언트
 ```
 
@@ -85,11 +85,15 @@ src/
 ```
 ProductSection (client)
  ├─ useProductFilter  ─ URL ?q=&type= 와 동기화 (새로고침·공유 시 상태 유지), 검색어 300ms 디바운스 후 URL 갱신, URL 변경 시 입력창도 동기화
- └─ useProducts       ─ TanStack Query (queryKey: ['products','list',filter])
-     └─ fetchProducts ─ supabase.from('products').ilike(title).eq(type)
+ ├─ useProducts       ─ TanStack Query useInfiniteQuery (queryKey: ['products','list',filter])
+ │   └─ fetchProducts ─ supabase.from('products').ilike(title).eq(type).range(from, to)
+ └─ useIntersect      ─ 목록 끝 센서가 화면에 들어오면 fetchNextPage()
 ```
 
-- 검색·필터는 DB 쿼리로 처리해 데이터가 늘어나도 동일하게 동작하고, 페이지네이션 확장이 쉽다.
+- 검색·필터는 DB 쿼리로 처리해 데이터가 늘어나도 동일하게 동작한다.
+- 목록은 12개씩 불러오는 무한 스크롤이다. 첫 화면은 Figma와 같은 12개이고, 스크롤하면 다음 12개를 이어서 불러온다.
+- 다음 페이지 여부는 13개(`PAGE_SIZE + 1`)를 요청해 판단하므로 전체 개수를 세는 추가 쿼리가 없다. 정렬은 `created_at`, `id` 순으로 고정해 페이지 사이 중복·누락을 막는다.
+- 검색어·유형이 바뀌면 query key가 바뀌어 첫 페이지부터 다시 불러온다.
 
 ## 디자인과 다른 부분: 할인율
 
