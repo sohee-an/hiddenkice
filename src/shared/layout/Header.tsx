@@ -28,7 +28,7 @@ export function Header() {
                   <Link
                     href={item.href}
                     aria-current={item.active ? "page" : undefined}
-                    className={`text-body-lg font-semibold whitespace-nowrap ${
+                    className={`text-body-lg whitespace-nowrap ${
                       item.active ? "text-primary" : "text-gray-300"
                     }`}
                   >

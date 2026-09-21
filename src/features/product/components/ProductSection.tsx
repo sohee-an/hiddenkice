@@ -62,7 +62,7 @@ function StatusMessage({
   return (
     <div
       role="status"
-      className="flex flex-col items-center gap-4 py-24 text-body font-semibold text-gray-300"
+      className="flex flex-col items-center gap-4 py-24 text-body text-gray-300"
     >
       <p>{message}</p>
       {action && (

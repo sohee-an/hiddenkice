@@ -16,12 +16,22 @@
   --color-gray-500: #636873;
   --color-gray-800: #1c1e21;
 
+  /* PC/Body/Large */
   --text-body-lg: 18px;
   --text-body-lg--line-height: 1.6;
+  --text-body-lg--font-weight: 600;
+  /* PC/Body/Default */
   --text-body: 16px;
   --text-body--line-height: 1.6;
+  --text-body--font-weight: 600;
+  /* PC/Body/Small/Regular */
   --text-body-sm: 14px;
   --text-body-sm--line-height: 1.5;
+  --text-body-sm--font-weight: 500;
+  /* PC/Body/Small/semibold */
+  --text-body-sm-semibold: 14px;
+  --text-body-sm-semibold--line-height: 1.5;
+  --text-body-sm-semibold--font-weight: 600;
 
   --container-content: 1280px;
 }

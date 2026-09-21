@@ -72,8 +72,8 @@ export function PromoBannerSlider({ banners = BANNERS }: PromoBannerSliderProps)
           <ArrowButton direction="prev" onClick={() => goTo(current - 1)} />
           <ArrowButton direction="next" onClick={() => goTo(current + 1)} />
           <p className="absolute right-4 bottom-4 w-[60px] rounded-full bg-black/30 px-2.5 py-1 text-center text-body-sm text-white md:right-10 md:bottom-[30px]">
-            <span className="font-semibold">{current + 1}</span>
-            <span className="font-medium">/{total}</span>
+            <span className="text-body-sm-semibold">{current + 1}</span>
+            <span>/{total}</span>
           </p>
         </>
       )}

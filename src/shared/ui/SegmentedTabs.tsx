@@ -22,7 +22,7 @@ export function SegmentedTabs<T extends string>({
     <div
       role="tablist"
       aria-label={label}
-      className="flex items-center gap-[11px] text-body font-semibold whitespace-nowrap"
+      className="flex items-center gap-[11px] text-body whitespace-nowrap"
     >
       {options.map((option, index) => {
         const selected = option.value === value;

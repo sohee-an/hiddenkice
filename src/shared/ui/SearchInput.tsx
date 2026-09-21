@@ -28,7 +28,7 @@ export function SearchInput({
           }
           placeholder={placeholder}
           aria-label={label}
-          className="min-w-0 flex-1 bg-transparent text-body font-semibold text-gray-800 outline-none placeholder:text-gray-300 [&::-webkit-search-cancel-button]:hidden"
+          className="min-w-0 flex-1 bg-transparent text-body text-gray-800 outline-none placeholder:text-gray-300 [&::-webkit-search-cancel-button]:hidden"
         />
       </div>
       <button
