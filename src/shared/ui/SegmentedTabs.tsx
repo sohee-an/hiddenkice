@@ -19,7 +19,7 @@ export function SegmentedTabs<T extends string>({
 }: SegmentedTabsProps<T>) {
   return (
     <div
-      role="tablist"
+      role="group"
       aria-label={label}
       className="flex items-center gap-[11px] text-body whitespace-nowrap"
     >
@@ -34,12 +34,11 @@ export function SegmentedTabs<T extends string>({
             )}
             <button
               type="button"
-              role="tab"
-              aria-selected={selected}
+              aria-pressed={selected}
               onClick={() => onChange(option.value)}
-              className={
+              className={`rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
                 selected ? "text-gray-800" : "text-gray-300 hover:text-gray-500"
-              }
+              }`}
             >
               {option.label}
             </button>
