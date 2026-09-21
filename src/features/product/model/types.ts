@@ -9,6 +9,11 @@ export type Product = {
   imageUrl: string;
 };
 
+export type ProductPage = {
+  items: Product[];
+  nextPage: number | null;
+};
+
 export type ProductTypeFilter = ProductType | "all";
 
 export type ProductFilter = {

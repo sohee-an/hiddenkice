@@ -1,5 +1,6 @@
 "use client";
 
+import { useIntersect } from "@/shared/hooks/useIntersect";
 import { useProductFilter } from "../hooks/useProductFilter";
 import { useProducts } from "../hooks/useProducts";
 import { ProductGrid, ProductGridSkeleton } from "./ProductGrid";
@@ -10,8 +11,21 @@ const SECTION_CLASS =
 
 export function ProductSection() {
   const { filter, keywordInput, changeKeyword, setType } = useProductFilter();
-  const { data, isPending, isError, isPlaceholderData, refetch } =
-    useProducts(filter);
+  const {
+    data,
+    isPending,
+    isError,
+    isPlaceholderData,
+    refetch,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useProducts(filter);
+
+  const products = data?.pages.flatMap((page) => page.items) ?? [];
+  const loadMoreRef = useIntersect<HTMLDivElement>(() => fetchNextPage(), {
+    enabled: hasNextPage && !isFetchingNextPage && !isPlaceholderData,
+  });
 
   return (
     <section
@@ -39,7 +53,7 @@ export function ProductSection() {
             message="교재 목록을 불러오지 못했습니다."
             action={{ label: "다시 시도", onClick: () => refetch() }}
           />
-        ) : data.length === 0 ? (
+        ) : products.length === 0 ? (
           <StatusMessage
             message={
               filter.keyword
@@ -48,7 +62,15 @@ export function ProductSection() {
             }
           />
         ) : (
-          <ProductGrid products={data} />
+          <>
+            <ProductGrid products={products} />
+            {isFetchingNextPage && (
+              <div className="mt-9">
+                <ProductGridSkeleton count={4} />
+              </div>
+            )}
+            <div ref={loadMoreRef} aria-hidden className="h-px" />
+          </>
         )}
       </div>
     </section>
