@@ -1,5 +1,12 @@
 import { getSupabaseClient } from "@/shared/lib/supabase/client";
-import type { Product, ProductFilter, ProductType } from "../model/types";
+import type {
+  Product,
+  ProductFilter,
+  ProductPage,
+  ProductType,
+} from "../model/types";
+
+export const PRODUCT_PAGE_SIZE = 12;
 
 type ProductRow = {
   id: string;
@@ -25,14 +32,18 @@ function escapeLikePattern(value: string): string {
   return value.replace(/[\\%_]/g, (char) => `\\${char}`);
 }
 
-export async function fetchProducts({
-  keyword,
-  type,
-}: ProductFilter): Promise<Product[]> {
+export async function fetchProducts(
+  { keyword, type }: ProductFilter,
+  page: number,
+): Promise<ProductPage> {
+  const from = page * PRODUCT_PAGE_SIZE;
+
   let query = getSupabaseClient()
     .from("products")
     .select("id, title, type, price, sale_price, image_url")
-    .order("created_at", { ascending: true });
+    .order("created_at", { ascending: true })
+    .order("id", { ascending: true })
+    .range(from, from + PRODUCT_PAGE_SIZE);
 
   const trimmed = keyword.trim();
   if (trimmed) {
@@ -48,5 +59,9 @@ export async function fetchProducts({
   >();
   if (error) throw new Error(error.message);
 
-  return data.map(toProduct);
+  const hasNext = data.length > PRODUCT_PAGE_SIZE;
+  return {
+    items: data.slice(0, PRODUCT_PAGE_SIZE).map(toProduct),
+    nextPage: hasNext ? page + 1 : null,
+  };
 }

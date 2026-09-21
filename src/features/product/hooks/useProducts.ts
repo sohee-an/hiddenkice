@@ -1,6 +1,6 @@
 "use client";
 
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import { fetchProducts } from "../api/fetchProducts";
 import type { ProductFilter } from "../model/types";
 
@@ -11,9 +11,11 @@ export const productKeys = {
 };
 
 export function useProducts(filter: ProductFilter) {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: productKeys.list(filter),
-    queryFn: () => fetchProducts(filter),
+    queryFn: ({ pageParam }) => fetchProducts(filter, pageParam),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
     placeholderData: keepPreviousData,
   });
 }
