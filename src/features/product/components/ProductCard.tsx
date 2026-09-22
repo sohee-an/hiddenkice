@@ -23,7 +23,7 @@ export function ProductCard({ product }: ProductCardProps) {
           {PRODUCT_TYPE_LABEL[product.type]}
         </p>
         <div className="flex flex-col gap-2">
-          <h3 className="text-body transition-colors group-hover:text-primary">
+          <h3 className="line-clamp-1 text-body transition-colors group-hover:text-primary">
             {product.title}
           </h3>
           <ProductPrice price={product.price} salePrice={product.salePrice} />
