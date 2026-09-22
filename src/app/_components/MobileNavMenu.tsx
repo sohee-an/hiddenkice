@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useId, useState } from "react";
+import { NavLink } from "./NavLink";
 import { NAV_ITEMS } from "./navItems";
 
 export function MobileNavMenu() {
@@ -46,16 +46,13 @@ export function MobileNavMenu() {
           <ul className="mx-auto flex max-w-content flex-col px-4 py-2">
             {NAV_ITEMS.map((item) => (
               <li key={item.label}>
-                <Link
+                <NavLink
                   href={item.href}
-                  aria-current={item.active ? "page" : undefined}
                   onClick={() => setOpen(false)}
-                  className={`block py-3 text-body-lg ${
-                    item.active ? "text-primary" : "text-gray-300"
-                  }`}
+                  className="block py-3 text-body-lg"
                 >
                   {item.label}
-                </Link>
+                </NavLink>
               </li>
             ))}
           </ul>
