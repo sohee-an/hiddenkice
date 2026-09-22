@@ -38,8 +38,14 @@ export function Header() {
             icon="/icons/shopping-cart.svg"
             label="장바구니"
             badge={1}
+            badgeLeft={14}
           />
-          <IconButton icon="/icons/bell.svg" label="알림" badge={1} />
+          <IconButton
+            icon="/icons/bell.svg"
+            label="알림"
+            badge={1}
+            badgeLeft={11}
+          />
           <IconButton icon="/icons/user.svg" label="마이페이지" />
           <MobileNavMenu />
         </div>
@@ -52,16 +58,26 @@ function IconButton({
   icon,
   label,
   badge,
+  badgeLeft = 12,
 }: {
   icon: string;
   label: string;
   badge?: number;
+  badgeLeft?: number;
 }) {
   return (
-    <button type="button" aria-label={label} className="relative size-6">
+    <button
+      type="button"
+      aria-label={badge ? `${label} ${badge}개` : label}
+      className={`relative h-6 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${badge ? "w-[27px]" : "w-6"}`}
+    >
       <Image src={icon} alt="" width={24} height={24} />
       {badge ? (
-        <span className="absolute -top-1.5 left-3 flex size-[15px] items-center justify-center rounded-full bg-primary text-[10px] leading-[1.4] text-white">
+        <span
+          aria-hidden
+          className="absolute -top-1.5 flex size-[15px] items-center justify-center rounded-full bg-primary text-[10px] leading-[1.4] text-white"
+          style={{ left: badgeLeft }}
+        >
           {badge}
         </span>
       ) : null}
