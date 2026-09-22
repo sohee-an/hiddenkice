@@ -17,7 +17,7 @@ export function SearchInput({
   label = "검색",
 }: SearchInputProps) {
   return (
-    <div className="flex w-full items-center gap-2 rounded-md border border-gray-100 p-2 focus-within:border-primary sm:w-[250px]">
+    <div className="flex h-[42px] w-full items-center gap-2 rounded-md border border-gray-100 px-2 focus-within:border-primary sm:w-[250px]">
       <div className="flex min-w-0 flex-1 items-center gap-1.5">
         <Image src="/icons/search.svg" alt="" width={20} height={20} />
         <input
@@ -35,7 +35,7 @@ export function SearchInput({
         type="button"
         onClick={() => onChange("")}
         aria-label="검색어 지우기"
-        className={`shrink-0 ${value ? "visible" : "invisible"}`}
+        className="shrink-0"
       >
         <Image src="/icons/x.svg" alt="" width={16} height={16} />
       </button>
