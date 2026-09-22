@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { MobileNavMenu } from "./MobileNavMenu";
+import { NavLink } from "./NavLink";
 import { NAV_ITEMS } from "./navItems";
 
 export function Header() {
@@ -20,15 +21,12 @@ export function Header() {
             <ul className="flex items-center gap-8">
               {NAV_ITEMS.map((item) => (
                 <li key={item.label}>
-                  <Link
+                  <NavLink
                     href={item.href}
-                    aria-current={item.active ? "page" : undefined}
-                    className={`text-body-lg whitespace-nowrap ${
-                      item.active ? "text-primary" : "text-gray-300"
-                    }`}
+                    className="text-body-lg whitespace-nowrap"
                   >
                     {item.label}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>
