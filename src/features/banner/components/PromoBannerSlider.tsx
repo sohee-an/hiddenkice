@@ -35,7 +35,7 @@ export function PromoBannerSlider({ banners = BANNERS }: PromoBannerSliderProps)
     <section
       aria-roledescription="carousel"
       aria-label="프로모션 배너"
-      className="group relative overflow-hidden border-b border-[#e5e5e5] bg-[#f2f5f8]"
+      className="group relative overflow-hidden border-b border-[#e5e5e5] bg-[#fafafa]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
@@ -52,7 +52,7 @@ export function PromoBannerSlider({ banners = BANNERS }: PromoBannerSliderProps)
             aria-roledescription="slide"
             aria-label={`${index + 1} / ${total}`}
             aria-hidden={index !== current}
-            className="relative aspect-[1440/490] w-full shrink-0"
+            className="relative aspect-[1440/490] w-full shrink-0 bg-[#f2f5f8]"
           >
             <Image
               src={banner.imageUrl}
