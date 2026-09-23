@@ -1,13 +1,8 @@
-export type ProductType = "single" | "pass";
-
-export type Product = {
-  id: string;
-  title: string;
-  type: ProductType;
-  price: number;
-  salePrice: number | null;
-  imageUrl: string;
-};
+import {
+  PRODUCT_TYPE_LABEL,
+  type Product,
+  type ProductType,
+} from "@/entities/product";
 
 export type ProductPage = {
   items: Product[];
@@ -19,11 +14,6 @@ export type ProductTypeFilter = ProductType | "all";
 export type ProductFilter = {
   keyword: string;
   type: ProductTypeFilter;
-};
-
-export const PRODUCT_TYPE_LABEL: Record<ProductType, string> = {
-  single: "단품",
-  pass: "패스",
 };
 
 export const PRODUCT_TYPE_FILTER_OPTIONS = [

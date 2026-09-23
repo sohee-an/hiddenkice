@@ -1,8 +1,9 @@
 "use client";
 
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useIntersect } from "@/shared/hooks/useIntersect";
+import { productListQuery } from "../api/productService";
 import { useProductFilter } from "../hooks/useProductFilter";
-import { useProducts } from "../hooks/useProducts";
 import { ProductGrid, ProductGridSkeleton } from "./ProductGrid";
 import { ProductToolbar } from "./ProductToolbar";
 
@@ -21,7 +22,7 @@ export function ProductSection() {
     isFetchingNextPage,
     isFetchNextPageError,
     fetchNextPage,
-  } = useProducts(filter);
+  } = useInfiniteQuery(productListQuery(filter));
 
   const products = data?.pages.flatMap((page) => page.items) ?? [];
   const loadMoreRef = useIntersect<HTMLDivElement>(() => fetchNextPage(), {
