@@ -18,7 +18,10 @@ export function MobileNavMenu() {
       if (e.key === "Escape") setOpen(false);
     };
     const handlePointerDown = (e: PointerEvent) => {
-      if (!containerRef.current?.contains(e.target as Node)) setOpen(false);
+      if (e.target instanceof Node && containerRef.current?.contains(e.target)) {
+        return;
+      }
+      setOpen(false);
     };
     const desktop = window.matchMedia(DESKTOP_QUERY);
     const handleDesktop = (e: MediaQueryListEvent) => {
