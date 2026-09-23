@@ -1,31 +1,51 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { NavLink } from "./NavLink";
 import { NAV_ITEMS } from "./navItems";
+
+/* Tailwind의 lg 중단점. 이 폭부터는 메뉴 대신 헤더 내비게이션이 보인다 */
+const DESKTOP_QUERY = "(min-width: 64rem)";
 
 export function MobileNavMenu() {
   const [open, setOpen] = useState(false);
   const menuId = useId();
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
     };
+    const handlePointerDown = (e: PointerEvent) => {
+      if (!containerRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    /* 메뉴가 열린 채로 데스크톱 폭이 되면 화면에서 사라지므로 상태도 같이 닫는다 */
+    const desktop = window.matchMedia(DESKTOP_QUERY);
+    const handleDesktop = (e: MediaQueryListEvent) => {
+      if (e.matches) setOpen(false);
+    };
+
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener("pointerdown", handlePointerDown);
+    desktop.addEventListener("change", handleDesktop);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("pointerdown", handlePointerDown);
+      desktop.removeEventListener("change", handleDesktop);
+    };
   }, [open]);
 
   return (
-    <div className="lg:hidden">
+    <div ref={containerRef} className="lg:hidden">
       <button
         type="button"
         aria-label={open ? "메뉴 닫기" : "메뉴 열기"}
         aria-expanded={open}
         aria-controls={menuId}
         onClick={() => setOpen((prev) => !prev)}
-        className="flex size-6 items-center justify-center text-gray-500"
+        className="flex size-6 items-center justify-center rounded-sm text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
           <path

@@ -9,6 +9,14 @@ import {
   type ProductTypeFilter,
 } from "../model/types";
 
+const FILTER_PARAMS: Record<
+  keyof ProductFilter,
+  { param: string; defaultValue: string }
+> = {
+  keyword: { param: "q", defaultValue: "" },
+  type: { param: "type", defaultValue: "all" },
+};
+
 export function useProductFilter() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -34,14 +42,13 @@ export function useProductFilter() {
   const updateParams = useCallback(
     (next: Partial<ProductFilter>) => {
       const params = new URLSearchParams(window.location.search);
-      if (next.keyword !== undefined) {
-        const keyword = next.keyword.trim();
-        if (keyword) params.set("q", keyword);
-        else params.delete("q");
-      }
-      if (next.type !== undefined) {
-        if (next.type === "all") params.delete("type");
-        else params.set("type", next.type);
+      for (const [key, value] of Object.entries(next)) {
+        if (value === undefined) continue;
+        const { param, defaultValue } = FILTER_PARAMS[key as keyof ProductFilter];
+        const trimmed = value.trim();
+        /* 기본값은 URL에 남기지 않는다. 새 필터가 생기면 FILTER_PARAMS에만 추가하면 된다 */
+        if (!trimmed || trimmed === defaultValue) params.delete(param);
+        else params.set(param, trimmed);
       }
       const query = params.toString();
       window.history.replaceState(null, "", query ? `${pathname}?${query}` : pathname);
