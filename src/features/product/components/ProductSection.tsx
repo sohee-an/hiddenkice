@@ -118,7 +118,7 @@ function StatusMessage({
         <button
           type="button"
           onClick={action.onClick}
-          className="rounded-md border border-gray-100 px-4 py-2 text-body-sm text-gray-500 hover:border-primary hover:text-primary"
+          className="rounded-md border border-gray-100 px-4 py-2 text-body-sm text-gray-500 hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
           {action.label}
         </button>

@@ -2,7 +2,6 @@ export type Banner = {
   id: string;
   imageUrl: string;
   alt: string;
-  href?: string;
 };
 
 const HERO_ALT =

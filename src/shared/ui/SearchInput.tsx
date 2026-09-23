@@ -31,6 +31,8 @@ export function SearchInput({
       <div className="flex min-w-0 flex-1 items-center gap-1.5">
         <Image src="/icons/search.svg" alt="" width={20} height={20} />
         <input
+          /* 전달받은 props를 먼저 펼쳐 내부 배선(ref, value, onChange)이 덮이지 않게 한다 */
+          {...inputProps}
           ref={inputRef}
           type="search"
           value={value}
@@ -39,7 +41,6 @@ export function SearchInput({
           }
           placeholder={placeholder}
           aria-label={label}
-          {...inputProps}
           className="min-w-0 flex-1 bg-transparent text-body text-gray-800 outline-none placeholder:text-gray-300 [&::-webkit-search-cancel-button]:hidden"
         />
       </div>
@@ -51,7 +52,7 @@ export function SearchInput({
           inputRef.current?.focus();
         }}
         aria-label="검색어 지우기"
-        className={`shrink-0 ${value ? "visible" : "invisible"}`}
+        className={`shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${value ? "visible" : "invisible"}`}
       >
         <Image src="/icons/x.svg" alt="" width={16} height={16} />
       </button>

@@ -49,6 +49,9 @@ src/
 │  ├─ layout.tsx        # 폰트, Providers, Header/Footer
 │  ├─ providers.tsx     # QueryClientProvider
 │  ├─ page.tsx          # 스토어 메인 (Banner + ProductSection)
+│  ├─ error.tsx         # 라우트 에러 경계
+│  ├─ global-error.tsx  # 루트 레이아웃 실패 시
+│  ├─ not-found.tsx     # 404
 │  └─ globals.css       # 디자인 토큰
 ├─ features/            # 도메인 단위 모듈
 │  ├─ product/
@@ -68,7 +71,7 @@ src/
 │     └─ model/         # Product, ProductType, 타입 라벨
 └─ shared/              # 도메인과 무관한 공용 코드
    ├─ ui/               # SearchInput, SegmentedTabs, Skeleton
-   ├─ hooks/            # useDebouncedCallback, useIntersect(IntersectionObserver)
+   ├─ hooks/            # useDebouncedCallback, useIntersect, usePrefersReducedMotion
    └─ lib/supabase/     # 브라우저용 Supabase 클라이언트
 ```
 
