@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    name: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # next build는 ESLint를 돌리지 않으므로(타입 검사만 함) 레이어 규칙은 여기서 강제한다
+      - name: ESLint
+        run: npm run lint
+
+      # LayoutProps 등 Next가 생성하는 라우트 타입이 있어야 tsc가 통과한다
+      - name: 라우트 타입 생성
+        run: npx next typegen
+
+      - name: 타입 검사
+        run: npx tsc --noEmit
