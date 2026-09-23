@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { PRODUCT_TYPE_LABEL, type Product } from "../model/types";
+import { PRODUCT_TYPE_LABEL, type Product } from "@/entities/product";
 import { ProductPrice } from "./ProductPrice";
 
 type ProductCardProps = {

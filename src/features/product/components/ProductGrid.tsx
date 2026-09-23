@@ -1,5 +1,5 @@
+import type { Product } from "@/entities/product";
 import { Skeleton } from "@/shared/ui/Skeleton";
-import type { Product } from "../model/types";
 import { ProductCard } from "./ProductCard";
 
 const GRID_CLASS =

@@ -1,11 +1,7 @@
 import { infiniteQueryOptions, keepPreviousData } from "@tanstack/react-query";
+import type { Product, ProductType } from "@/entities/product";
 import { getSupabaseClient } from "@/shared/lib/supabase/client";
-import type {
-  Product,
-  ProductFilter,
-  ProductPage,
-  ProductType,
-} from "../model/types";
+import type { ProductFilter, ProductPage } from "../model/types";
 
 export const PRODUCT_PAGE_SIZE = 12;
 
