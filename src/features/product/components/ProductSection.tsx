@@ -72,7 +72,7 @@ export function ProductSection() {
             <ProductGrid products={products} />
             {isFetchingNextPage && (
               <div className="mt-9">
-                <ProductGridSkeleton count={4} />
+                <ProductGridSkeleton />
               </div>
             )}
             {isFetchNextPageError ? (

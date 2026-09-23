@@ -1,5 +1,6 @@
 import type { Product } from "@/entities/product";
 import { Skeleton } from "@/shared/ui/Skeleton";
+import { PRODUCT_PAGE_SIZE } from "../api/productService";
 import { ProductCard } from "./ProductCard";
 
 const GRID_CLASS =
@@ -17,7 +18,11 @@ export function ProductGrid({ products }: { products: Product[] }) {
   );
 }
 
-export function ProductGridSkeleton({ count = 8 }: { count?: number }) {
+export function ProductGridSkeleton({
+  count = PRODUCT_PAGE_SIZE,
+}: {
+  count?: number;
+}) {
   return (
     <ul className={GRID_CLASS} aria-hidden>
       {Array.from({ length: count }, (_, index) => (

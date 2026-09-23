@@ -5,7 +5,7 @@ import { useRef, type ChangeEvent, type ComponentProps } from "react";
 
 type SearchInputProps = Omit<
   ComponentProps<"input">,
-  "value" | "onChange" | "type"
+  "value" | "onChange" | "type" | "ref"
 > & {
   value: string;
   onChange: (value: string) => void;
