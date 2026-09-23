@@ -153,11 +153,13 @@ ProductSection (client)
 | 시점 | 도구 | 검사 |
 |---|---|---|
 | 커밋 전 | husky + lint-staged | 변경된 파일만 `eslint --fix` (빠른 피드백) |
-| PR·main push | GitHub Actions (`.github/workflows/ci.yml`) | `eslint` 전체 + `tsc --noEmit` |
+| PR·main push | GitHub Actions (`.github/workflows/ci.yml`) | `eslint` → `next typegen` → `tsc --noEmit` → 단위 테스트 |
 
 CI의 `verify` 체크는 main 브랜치 보호 규칙의 필수 조건이라, 통과하지 못하면 머지할 수 없다. 커밋 훅은 `--no-verify`로 건너뛸 수 있으므로 실제 방어선은 CI 쪽이다.
 
 타입 검사 전에는 `next typegen`을 먼저 실행한다. `LayoutProps` 등 Next가 빌드 과정에서 생성하는 라우트 타입이 없으면 `tsc`가 실패하기 때문이다.
+
+테스트는 `useProductFilter`부터 붙였다(Vitest + jsdom, `npm test`). 이 훅이 검색어 디바운스, URL 동기화, 외부 URL 변경 대응을 한꺼번에 다루는 가장 복잡한 지점이라 회귀가 나도 눈으로 잡기 어렵기 때문이다. 디바운스 경계(299ms에는 URL이 그대로, 300ms에 갱신), 연속 입력 시 마지막 값만 반영, 기본값(`all`·빈 문자열)일 때 파라미터 제거, 자신이 만든 URL 변경으로는 입력창을 덮어쓰지 않는 분기를 확인한다.
 
 배포(CD)는 별도로 만들지 않고 Vercel의 Git 연동을 그대로 쓴다. 직접 파이프라인을 구성하면 PR별 프리뷰 배포를 잃고 얻는 것이 없다고 판단했다.
 
