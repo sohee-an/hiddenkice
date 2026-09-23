@@ -138,6 +138,14 @@ ProductSection (client)
 - **필터와 검색** — 유형 필터 버튼은 `aria-pressed`로 선택 상태를 알린다. 검색어 지우기(X) 버튼은 누르면 숨겨지므로, 지운 뒤 입력창으로 포커스를 되돌려 키보드 흐름이 끊기지 않게 했다.
 - **포커스 표시** — 버튼에 `focus-visible` 윤곽선을 둬 키보드 사용자가 현재 위치를 알 수 있다.
 
+## SEO
+
+메타데이터는 `layout.tsx`에서 정적으로 제공한다. 제목·설명·OG·트위터 카드와 1200×630 OG 이미지, `lang="ko"`, `<h1>`이 초기 HTML에 포함되므로 페이지 색인과 링크 공유 미리보기는 정상 동작한다. 여기에 `robots.ts`(크롤링 허용 + 사이트맵 위치)와 `sitemap.ts`를 두었고, 프리뷰 배포 URL이 따로 색인되지 않도록 canonical을 지정했다. 주소·이름·설명은 `siteConfig.ts` 한 곳에서 관리해 metadata와 robots·sitemap이 어긋나지 않게 했다.
+
+**다만 교재 목록은 초기 HTML에 없다.** 요구사항이 CSR이라 목록을 브라우저에서 조회하기 때문이다. 그 결과 상품명·가격이 HTML에 포함되지 않아, "히든카이스 스토어" 같은 사이트 단위 검색에는 노출되지만 **개별 교재명으로는 검색 유입이 되지 않는다.** 구글은 JS를 실행해 뒤늦게 색인하지만 지연이 생기고, 네이버는 JS 실행이 제한적이라 사실상 읽지 못한다.
+
+전환이 필요해지면 목록만 서버에서 미리 받아오면 된다. query key와 옵션을 `"use client"`가 없는 `api/productService.ts`에 두었고 `useSearchParams`를 위한 Suspense 경계도 이미 잡혀 있으므로, `page.tsx`에서 `prefetchInfiniteQuery` 호출과 `HydrationBoundary`를 추가하는 선에서 끝난다. 교재 상세 페이지를 만든다면 그 페이지는 서버에서 데이터를 받아 `generateMetadata`와 `Product` 구조화 데이터(JSON-LD)를 함께 제공하는 것이 다음 단계다.
+
 ## 품질 관리
 
 **`next build`는 TypeScript만 검사하고 ESLint는 실행하지 않는다.** 따라서 위 폴더 구조의 import 규칙을 어긴 코드도 빌드를 통과해 배포될 수 있다. 규칙이 실제로 강제되도록 두 지점에서 검사한다.
