@@ -9,6 +9,7 @@ type SegmentedTabsProps<T extends string> = {
   value: T;
   onChange: (value: T) => void;
   label: string;
+  className?: string;
 };
 
 export function SegmentedTabs<T extends string>({
@@ -16,12 +17,13 @@ export function SegmentedTabs<T extends string>({
   value,
   onChange,
   label,
+  className = "",
 }: SegmentedTabsProps<T>) {
   return (
     <div
       role="group"
       aria-label={label}
-      className="flex items-center gap-[11px] text-body whitespace-nowrap"
+      className={`flex items-center gap-[11px] text-body whitespace-nowrap ${className}`}
     >
       {options.map((option, index) => {
         const selected = option.value === value;

@@ -26,6 +26,7 @@ export function ProductToolbar({
         value={keyword}
         onChange={onKeywordChange}
         label="교재 검색"
+        className="w-full sm:w-[250px]"
       />
       <SegmentedTabs
         label="교재 유형"
