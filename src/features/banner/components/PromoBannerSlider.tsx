@@ -18,7 +18,6 @@ export function PromoBannerSlider({ banners = BANNERS }: PromoBannerSliderProps)
   const prefersReducedMotion = usePrefersReducedMotion();
   const total = banners.length;
 
-  /* 동작 줄이기 설정이면 자동 전환을 아예 하지 않는다 */
   const autoPlayable = total > 1 && !prefersReducedMotion;
   const paused = stopped || hovered;
 
@@ -96,7 +95,6 @@ export function PromoBannerSlider({ banners = BANNERS }: PromoBannerSliderProps)
   );
 }
 
-/* 5초마다 자동으로 넘어가므로 멈출 수단이 필요하다 (WCAG 2.2.2) */
 function PlayPauseButton({
   stopped,
   onClick,
@@ -134,7 +132,6 @@ function ArrowButton({
 }) {
   const isPrev = direction === "prev";
   return (
-    /* 터치 기기에는 호버가 없어 작은 화면에서는 항상 보이게 두고, lg 이상에서만 호버로 드러낸다 */
     <button
       type="button"
       onClick={onClick}

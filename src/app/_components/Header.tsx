@@ -68,7 +68,6 @@ function IconButton({
   return (
     <button
       type="button"
-      /* 뱃지 숫자는 아직 실제 데이터가 아니므로 라벨에 넣지 않는다 */
       aria-label={label}
       className={`relative h-6 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${badge ? "w-[27px]" : "w-6"}`}
     >

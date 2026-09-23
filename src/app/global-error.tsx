@@ -2,10 +2,6 @@
 
 import { useEffect } from "react";
 
-/*
- * 루트 레이아웃 자체가 실패했을 때만 쓰인다. layout.tsx를 대체하므로 html/body를 직접 그린다.
- * 이 상황에서는 폰트·토큰이 적용되지 않을 수 있어 인라인 스타일로 최소한의 화면만 보여준다.
- */
 export default function GlobalError({
   error,
   reset,

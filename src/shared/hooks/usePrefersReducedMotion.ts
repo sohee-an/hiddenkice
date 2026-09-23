@@ -10,7 +10,6 @@ function subscribe(onChange: () => void) {
   return () => query.removeEventListener("change", onChange);
 }
 
-/* 운영체제의 "동작 줄이기" 설정. 서버에서는 알 수 없으므로 false로 렌더한다 */
 export function usePrefersReducedMotion(): boolean {
   return useSyncExternalStore(
     subscribe,
