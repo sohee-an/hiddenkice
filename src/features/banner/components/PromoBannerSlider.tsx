@@ -134,11 +134,12 @@ function ArrowButton({
 }) {
   const isPrev = direction === "prev";
   return (
+    /* 터치 기기에는 호버가 없어 작은 화면에서는 항상 보이게 두고, lg 이상에서만 호버로 드러낸다 */
     <button
       type="button"
       onClick={onClick}
       aria-label={isPrev ? "이전 배너" : "다음 배너"}
-      className={`absolute top-1/2 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/30 text-white opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 ${
+      className={`absolute top-1/2 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/30 text-white opacity-100 transition-opacity lg:opacity-0 lg:group-hover:opacity-100 focus-visible:opacity-100 ${
         isPrev ? "left-4" : "right-4"
       }`}
     >
