@@ -1,4 +1,3 @@
-/* 사이트 주소는 metadata, robots, sitemap이 함께 쓰므로 한 곳에 둔다 */
 export const SITE_URL = "https://hiddenkice.vercel.app";
 
 export const SITE_NAME = "히든카이스 스토어";

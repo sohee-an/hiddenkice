@@ -17,7 +17,6 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: SITE_NAME,
   description: SITE_DESCRIPTION,
-  /* 프리뷰 배포 URL이 따로 색인되지 않도록 대표 주소를 지정한다 */
   alternates: {
     canonical: "/",
   },
