@@ -30,3 +30,6 @@ jobs:
 
       - name: 타입 검사
         run: npx tsc --noEmit
+
+      - name: 단위 테스트
+        run: npm test
