@@ -4,7 +4,6 @@ import { useEffect, useId, useRef, useState } from "react";
 import { NavLink } from "./NavLink";
 import { NAV_ITEMS } from "./navItems";
 
-/* Tailwind의 lg 중단점. 이 폭부터는 메뉴 대신 헤더 내비게이션이 보인다 */
 const DESKTOP_QUERY = "(min-width: 64rem)";
 
 export function MobileNavMenu() {
@@ -21,7 +20,6 @@ export function MobileNavMenu() {
     const handlePointerDown = (e: PointerEvent) => {
       if (!containerRef.current?.contains(e.target as Node)) setOpen(false);
     };
-    /* 메뉴가 열린 채로 데스크톱 폭이 되면 화면에서 사라지므로 상태도 같이 닫는다 */
     const desktop = window.matchMedia(DESKTOP_QUERY);
     const handleDesktop = (e: MediaQueryListEvent) => {
       if (e.matches) setOpen(false);

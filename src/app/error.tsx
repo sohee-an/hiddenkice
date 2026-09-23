@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 
-/* 라우트 세그먼트 단위 에러 경계. Header/Footer는 유지되고 이 영역만 대체된다 */
 export default function Error({
   error,
   reset,
@@ -11,7 +10,6 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    // 수집 도구를 붙이기 전까지는 콘솔에 남긴다. digest로 서버 로그와 대조할 수 있다
     console.error(error);
   }, [error]);
 

@@ -10,7 +10,6 @@ type SearchInputProps = Omit<
   value: string;
   onChange: (value: string) => void;
   label?: string;
-  /* 폭 같은 레이아웃은 호출부가 정한다 */
   className?: string;
 };
 
@@ -31,7 +30,6 @@ export function SearchInput({
       <div className="flex min-w-0 flex-1 items-center gap-1.5">
         <Image src="/icons/search.svg" alt="" width={20} height={20} />
         <input
-          /* 전달받은 props를 먼저 펼쳐 내부 배선(ref, value, onChange)이 덮이지 않게 한다 */
           {...inputProps}
           ref={inputRef}
           type="search"
@@ -46,7 +44,6 @@ export function SearchInput({
       </div>
       <button
         type="button"
-        /* 버튼이 숨겨지면 포커스가 사라지므로 입력창으로 되돌린다 */
         onClick={() => {
           onChange("");
           inputRef.current?.focus();

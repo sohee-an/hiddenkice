@@ -46,7 +46,6 @@ export function useProductFilter() {
         if (value === undefined) continue;
         const { param, defaultValue } = FILTER_PARAMS[key as keyof ProductFilter];
         const trimmed = value.trim();
-        /* 기본값은 URL에 남기지 않는다. 새 필터가 생기면 FILTER_PARAMS에만 추가하면 된다 */
         if (!trimmed || trimmed === defaultValue) params.delete(param);
         else params.set(param, trimmed);
       }

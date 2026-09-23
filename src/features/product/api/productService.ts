@@ -70,14 +70,12 @@ export const productService = {
 };
 
 export const productKeys = {
-  /* 무효화용 접두사. 상품이 바뀌면 목록·상세가 같이 낡는다 */
   all: ["products"] as const,
   lists: () => [...productKeys.all, "list"] as const,
   list: (filter: ProductFilter) => [...productKeys.lists(), filter] as const,
   detail: (id: string) => [...productKeys.all, "detail", id] as const,
 };
 
-/* "use client"가 없는 파일에 두어 서버·클라이언트가 같은 key를 쓸 수 있게 한다 */
 export const productListQuery = (filter: ProductFilter) =>
   infiniteQueryOptions({
     queryKey: productKeys.list(filter),
