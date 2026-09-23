@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { Footer } from "./_components/Footer";
 import { Header } from "./_components/Header";
 import { Providers } from "./providers";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "./siteConfig";
 import "./globals.css";
 
 const pretendard = localFont({
@@ -12,14 +13,14 @@ const pretendard = localFont({
   display: "swap",
 });
 
-const SITE_NAME = "히든카이스 스토어";
-const SITE_DESCRIPTION =
-  "모두가 푸는 건 이유가 있습니다. 상위권이 선택한 문제집, 히든카이스 교재를 만나보세요.";
-
 export const metadata: Metadata = {
-  metadataBase: new URL("https://hiddenkice.vercel.app"),
+  metadataBase: new URL(SITE_URL),
   title: SITE_NAME,
   description: SITE_DESCRIPTION,
+  /* 프리뷰 배포 URL이 따로 색인되지 않도록 대표 주소를 지정한다 */
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
     locale: "ko_KR",
