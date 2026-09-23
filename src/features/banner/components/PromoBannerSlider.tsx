@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
+import { usePrefersReducedMotion } from "@/shared/hooks/usePrefersReducedMotion";
 import { BANNERS, type Banner } from "../data/banners";
 
 const AUTO_PLAY_MS = 5000;
@@ -12,8 +13,14 @@ type PromoBannerSliderProps = {
 
 export function PromoBannerSlider({ banners = BANNERS }: PromoBannerSliderProps) {
   const [current, setCurrent] = useState(0);
-  const [paused, setPaused] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [stopped, setStopped] = useState(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
   const total = banners.length;
+
+  /* 동작 줄이기 설정이면 자동 전환을 아예 하지 않는다 */
+  const autoPlayable = total > 1 && !prefersReducedMotion;
+  const paused = stopped || hovered;
 
   const goTo = useCallback(
     (index: number) => setCurrent((index + total) % total),
@@ -21,13 +28,13 @@ export function PromoBannerSlider({ banners = BANNERS }: PromoBannerSliderProps)
   );
 
   useEffect(() => {
-    if (paused || total <= 1) return;
+    if (paused || !autoPlayable) return;
     const timer = setInterval(
       () => setCurrent((prev) => (prev + 1) % total),
       AUTO_PLAY_MS,
     );
     return () => clearInterval(timer);
-  }, [paused, total]);
+  }, [paused, autoPlayable, total]);
 
   if (total === 0) return null;
 
@@ -36,13 +43,13 @@ export function PromoBannerSlider({ banners = BANNERS }: PromoBannerSliderProps)
       aria-roledescription="carousel"
       aria-label="프로모션 배너"
       className="group relative overflow-hidden border-b border-[#e5e5e5] bg-[#fafafa]"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onFocus={() => setPaused(true)}
-      onBlur={() => setPaused(false)}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
     >
       <div
-        className="flex transition-transform duration-500 ease-out"
+        className="flex transition-transform duration-500 ease-out motion-reduce:transition-none"
         style={{ transform: `translateX(-${current * 100}%)` }}
       >
         {banners.map((banner, index) => (
@@ -71,13 +78,50 @@ export function PromoBannerSlider({ banners = BANNERS }: PromoBannerSliderProps)
         <>
           <ArrowButton direction="prev" onClick={() => goTo(current - 1)} />
           <ArrowButton direction="next" onClick={() => goTo(current + 1)} />
-          <p className="absolute right-4 bottom-4 w-[60px] rounded-full bg-black/30 px-2.5 py-1 text-center text-body-sm text-white md:right-10 md:bottom-[30px]">
-            <span className="text-body-sm-semibold">{current + 1}</span>
-            <span>/{total}</span>
-          </p>
+          <div className="absolute right-4 bottom-4 flex items-center gap-2 md:right-10 md:bottom-[30px]">
+            {autoPlayable && (
+              <PlayPauseButton
+                stopped={stopped}
+                onClick={() => setStopped((prev) => !prev)}
+              />
+            )}
+            <p className="w-[60px] rounded-full bg-black/30 px-2.5 py-1 text-center text-body-sm text-white">
+              <span className="text-body-sm-semibold">{current + 1}</span>
+              <span>/{total}</span>
+            </p>
+          </div>
         </>
       )}
     </section>
+  );
+}
+
+/* 5초마다 자동으로 넘어가므로 멈출 수단이 필요하다 (WCAG 2.2.2) */
+function PlayPauseButton({
+  stopped,
+  onClick,
+}: {
+  stopped: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={stopped ? "배너 자동 전환 재생" : "배너 자동 전환 일시정지"}
+      className="flex size-[30px] items-center justify-center rounded-full bg-black/30 text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+    >
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+        {stopped ? (
+          <path d="M3.5 2L11.5 7L3.5 12V2Z" fill="currentColor" />
+        ) : (
+          <>
+            <rect x="3" y="2" width="3" height="10" fill="currentColor" />
+            <rect x="8" y="2" width="3" height="10" fill="currentColor" />
+          </>
+        )}
+      </svg>
+    </button>
   );
 }
 
