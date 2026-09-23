@@ -22,6 +22,8 @@ export const PRODUCT_TYPE_FILTER_OPTIONS = [
   { value: "single", label: PRODUCT_TYPE_LABEL.single },
 ] as const satisfies readonly { value: ProductTypeFilter; label: string }[];
 
+export const DEFAULT_PRODUCT_TYPE_FILTER = "all" satisfies ProductTypeFilter;
+
 export function isProductTypeFilter(value: unknown): value is ProductTypeFilter {
-  return value === "all" || value === "single" || value === "pass";
+  return PRODUCT_TYPE_FILTER_OPTIONS.some((option) => option.value === value);
 }

@@ -1,5 +1,5 @@
 import { infiniteQueryOptions, keepPreviousData } from "@tanstack/react-query";
-import type { Product, ProductType } from "@/entities/product";
+import { isProductType, type Product, type ProductType } from "@/entities/product";
 import { getSupabaseClient } from "@/shared/lib/supabase/client";
 import type { ProductFilter, ProductPage } from "../model/types";
 
@@ -8,13 +8,15 @@ export const PRODUCT_PAGE_SIZE = 12;
 type ProductRow = {
   id: string;
   title: string;
-  type: ProductType;
+  type: string;
   price: number;
   sale_price: number | null;
   image_url: string;
 };
 
-function toProduct(row: ProductRow): Product {
+type ValidProductRow = Omit<ProductRow, "type"> & { type: ProductType };
+
+function toProduct(row: ValidProductRow): Product {
   return {
     id: row.id,
     title: row.title,
@@ -63,7 +65,10 @@ export const productService = {
 
     const hasNext = data.length > PRODUCT_PAGE_SIZE;
     return {
-      items: data.slice(0, PRODUCT_PAGE_SIZE).map(toProduct),
+      items: data
+        .slice(0, PRODUCT_PAGE_SIZE)
+        .filter((row): row is ValidProductRow => isProductType(row.type))
+        .map(toProduct),
       nextPage: hasNext ? page + 1 : null,
     };
   },

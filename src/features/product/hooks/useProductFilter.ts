@@ -4,6 +4,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 import { useDebouncedCallback } from "@/shared/hooks/useDebouncedCallback";
 import {
+  DEFAULT_PRODUCT_TYPE_FILTER,
   isProductTypeFilter,
   type ProductFilter,
   type ProductTypeFilter,
@@ -14,16 +15,19 @@ const FILTER_PARAMS: Record<
   { param: string; defaultValue: string }
 > = {
   keyword: { param: "q", defaultValue: "" },
-  type: { param: "type", defaultValue: "all" },
+  type: { param: "type", defaultValue: DEFAULT_PRODUCT_TYPE_FILTER },
 };
 
 export function useProductFilter() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const urlKeyword = searchParams.get("q") ?? "";
-  const rawType = searchParams.get("type");
-  const type: ProductTypeFilter = isProductTypeFilter(rawType) ? rawType : "all";
+  const urlKeyword =
+    searchParams.get(FILTER_PARAMS.keyword.param) ?? FILTER_PARAMS.keyword.defaultValue;
+  const rawType = searchParams.get(FILTER_PARAMS.type.param);
+  const type: ProductTypeFilter = isProductTypeFilter(rawType)
+    ? rawType
+    : DEFAULT_PRODUCT_TYPE_FILTER;
 
   const [keywordInput, setKeywordInput] = useState(urlKeyword);
 
@@ -57,7 +61,9 @@ export function useProductFilter() {
 
   const syncKeywordToUrl = useDebouncedCallback((keyword: string) => {
     const trimmed = keyword.trim();
-    const current = new URLSearchParams(window.location.search).get("q") ?? "";
+    const current =
+      new URLSearchParams(window.location.search).get(FILTER_PARAMS.keyword.param) ??
+      FILTER_PARAMS.keyword.defaultValue;
     if (trimmed === current) return;
     setPendingKeyword(trimmed);
     updateParams({ keyword: trimmed });

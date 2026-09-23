@@ -7,19 +7,21 @@ import { BANNERS, type Banner } from "../data/banners";
 
 const AUTO_PLAY_MS = 5000;
 
+const PLAY_PAUSE_SLOT = "banner-play-pause";
+
 type PromoBannerSliderProps = {
   banners?: Banner[];
 };
 
 export function PromoBannerSlider({ banners = BANNERS }: PromoBannerSliderProps) {
   const [current, setCurrent] = useState(0);
-  const [hovered, setHovered] = useState(false);
+  const [interacting, setInteracting] = useState(false);
   const [stopped, setStopped] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
   const total = banners.length;
 
   const autoPlayable = total > 1 && !prefersReducedMotion;
-  const paused = stopped || hovered;
+  const paused = stopped || interacting;
 
   const goTo = useCallback(
     (index: number) => setCurrent((index + total) % total),
@@ -42,10 +44,13 @@ export function PromoBannerSlider({ banners = BANNERS }: PromoBannerSliderProps)
       aria-roledescription="carousel"
       aria-label="프로모션 배너"
       className="group relative overflow-hidden border-b border-[#e5e5e5] bg-[#fafafa]"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onFocus={() => setHovered(true)}
-      onBlur={() => setHovered(false)}
+      onMouseEnter={() => setInteracting(true)}
+      onMouseLeave={() => setInteracting(false)}
+      onFocus={(e) => {
+        if (e.target.closest(`[data-slot="${PLAY_PAUSE_SLOT}"]`)) return;
+        setInteracting(true);
+      }}
+      onBlur={() => setInteracting(false)}
     >
       <div
         className="flex transition-transform duration-500 ease-out motion-reduce:transition-none"
@@ -105,6 +110,7 @@ function PlayPauseButton({
   return (
     <button
       type="button"
+      data-slot={PLAY_PAUSE_SLOT}
       onClick={onClick}
       aria-label={stopped ? "배너 자동 전환 재생" : "배너 자동 전환 일시정지"}
       className="flex size-[30px] items-center justify-center rounded-full bg-black/30 text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"

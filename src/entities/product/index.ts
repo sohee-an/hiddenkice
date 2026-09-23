@@ -1,4 +1,5 @@
 export {
+  isProductType,
   PRODUCT_TYPE_LABEL,
   type Product,
   type ProductType,
