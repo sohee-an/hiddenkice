@@ -25,7 +25,7 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="flex flex-col gap-2">
           <h3
             title={product.title}
-            className="line-clamp-2 min-h-[3.2em] text-body transition-colors group-hover:text-primary"
+            className="line-clamp-2 text-body transition-colors group-hover:text-primary"
           >
             {product.title}
           </h3>
